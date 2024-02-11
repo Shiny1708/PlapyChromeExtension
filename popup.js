@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('savePreset').addEventListener('click', function() {
+    document.getElementById('savePreset').addEventListener('click', function () {
         var presetName = prompt("Enter a name for this preset");
         if (presetName) {
             var preset = {
@@ -44,18 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 channelId: document.getElementById('channelId').value,
                 guildId: document.getElementById('guildId').value
             };
-            chrome.storage.local.get({presets: {}}, function(result) {
+            chrome.storage.local.get({ presets: {} }, function (result) {
                 result.presets[presetName] = preset;
-                chrome.storage.local.set({presets: result.presets}, function() {
+                chrome.storage.local.set({ presets: result.presets }, function () {
                     loadPresets();
                 });
             });
         }
     });
-    
-    document.getElementById('presetSelect').addEventListener('change', function() {
+
+    document.getElementById('presetSelect').addEventListener('change', function () {
         var presetName = this.value;
-        chrome.storage.local.get({presets: {}}, function(result) {
+        document.getElementById('deletePreset').disabled = !presetName;
+        chrome.storage.local.get({ presets: {} }, function (result) {
             if (result.presets[presetName]) {
                 var preset = result.presets[presetName];
                 document.getElementById('api').value = preset.api;
@@ -65,9 +66,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    document.getElementById('deletePreset').addEventListener('click', function() {
+        var presetName = document.getElementById('presetSelect').value;
+        if (presetName) {
+            if (confirm('Are you sure you want to delete this preset?')) {
+                chrome.storage.local.get({presets: {}}, function(result) {
+                    delete result.presets[presetName];
+                    chrome.storage.local.set({presets: result.presets}, function() {
+                        document.getElementById('deletePreset').disabled = true;
+                        loadPresets();
+                    });
+                });
+            }
+        }
+    });
     
+
     function loadPresets() {
-        chrome.storage.local.get({presets: {}}, function(result) {
+        chrome.storage.local.get({ presets: {} }, function (result) {
             var select = document.getElementById('presetSelect');
             select.innerHTML = '<option value="">Select a preset</option>';
             for (var presetName in result.presets) {
@@ -78,9 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
-    loadPresets();
-    
+
+
     loadPresets();
 
     // Listen for messages from the background page

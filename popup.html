@@ -14,15 +14,56 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            width: 100vh;
+            width: 120vh;
             background-color: #f4f4f4;
         }
 
+        .presetButton {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .presetButton:hover {
+            transform: scale(0.95);
+        }
+
+        .presetButton:active {
+            transform: scale(0.8);
+        }
+
         #buttons {
-            padding: 10px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            margin-right: 10px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+        }
+
+        #savePreset {
+            background-color: green;
+        }
+
+        #savePreset:hover {
+            background-color: darkgreen;
+        }
+
+        #deletePreset {
+            background-color: red;
+        }
+
+        #deletePreset:hover {
+            background-color: darkred;
+        }
+
+        #deletePreset:disabled {
+            background-color: grey;
+            cursor: not-allowed;
         }
 
         #presetSelect {
@@ -62,23 +103,12 @@
             border: 1px solid #ddd;
         }
 
-        #apiForm button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+        #apiCallButton {
             background-color: #007BFF;
-            color: #fff;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
         }
 
-        #apiForm button:hover {
+        #apiCallButton:hover {
             background-color: #0056b3;
-            transform: scale(0.95);
-        }
-
-        #apiForm button:active {
-            transform: scale(0.8);
         }
 
         @keyframes buttonAnimation {
@@ -103,14 +133,15 @@
         <select id="presetSelect">
             <option value="">Select a preset</option>
         </select>
-        <button id="savePreset">Save as preset</button>
+        <button id="savePreset" class="presetButton">Save</button>
+        <button id="deletePreset" class="presetButton" disabled>Delete</button>
     </div>
     <form id="apiForm">
         <input type="text" id="api" placeholder="Enter the API url">
         <input type="text" id="userId" placeholder="Enter your userid">
         <input type="text" id="channelId" placeholder="Enter the channelid of the music commands channel">
         <input type="text" id="guildId" placeholder="Enter guildid of your server">
-        <button type="submit">Send API Call</button>
+        <button id="apiCallButton" class="presetButton" type="submit">Send API Call</button>
         <span id="statusMessage"></span>
     </form>
 </body>

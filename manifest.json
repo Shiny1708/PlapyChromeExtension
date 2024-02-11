@@ -3,19 +3,24 @@
     "name": "Plapy API Caller",
     "description": "This extension sends an API call to Plapy to queue the current webpage as a song",
     "version": "1.0",
-    "permissions": ["storage", "activeTab", "webRequest"],
-    "host_permissions": ["<all_urls>"],
+    "permissions": [
+        "storage",
+        "activeTab",
+        "webRequest"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
     "icons": {
         "128": "icon128.png"
     },
     "action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "128": "icon128.png"
-      }
+        "default_popup": "popup.html",
+        "default_icon": {
+            "128": "icon128.png"
+        }
     },
     "background": {
-      "service_worker": "background.js"
+        "service_worker": "background.js"
     }
-    
-  }
+}

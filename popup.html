@@ -1,53 +1,118 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>API Caller</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 150vh;
-      background-color: #f4f4f4;
-    }
-    #apiForm {
-      background: #fff;
-      padding: 10px; /* Reduced padding */
-      border-radius: 8px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    #apiForm input[type="text"] {
-      width: 90%; /* Reduced width */
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-    }
-    #apiForm button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      background-color: #007BFF;
-      color: #fff;
-      cursor: pointer;
-    }
-    #apiForm button:hover {
-      background-color: #0056b3;
-    }
-  </style>
-  <script src="popup.js"></script>
+    <meta charset="UTF-8">
+    <title>API Caller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #buttons {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        #presetSelect {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            font-size: 16px;
+            color: #333;
+            width: 200px;
+            cursor: pointer;
+        }
+
+        #presetSelect:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        #presetSelect option {
+            padding: 10px;
+        }
+
+        #apiForm {
+            background: #fff;
+            padding: 10px;
+            /* Reduced padding */
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #apiForm input[type="text"] {
+            width: 90%;
+            /* Reduced width */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        #apiForm button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #apiForm button:hover {
+            background-color: #0056b3;
+            transform: scale(0.95);
+        }
+
+        #apiForm button:active {
+            transform: scale(0.8);
+        }
+
+        @keyframes buttonAnimation {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+    <script src="popup.js"></script>
 </head>
+
 <body>
-  <form id="apiForm">
-    <input type="text" id="api" placeholder="Enter the API url">
-    <input type="text" id="userId" placeholder="Enter your userid">
-    <input type="text" id="channelId" placeholder="Enter the channelid of the music commands channel">
-    <input type="text" id="guildId" placeholder="Enter guildid of your server">
-    <button type="submit">Send API Call</button>
-  </form>
+    <div id="buttons">
+        <select id="presetSelect">
+            <option value="">Select a preset</option>
+        </select>
+        <button id="savePreset">Save as preset</button>
+    </div>
+    <form id="apiForm">
+        <input type="text" id="api" placeholder="Enter the API url">
+        <input type="text" id="userId" placeholder="Enter your userid">
+        <input type="text" id="channelId" placeholder="Enter the channelid of the music commands channel">
+        <input type="text" id="guildId" placeholder="Enter guildid of your server">
+        <button type="submit">Send API Call</button>
+        <span id="statusMessage"></span>
+    </form>
 </body>
+
 </html>

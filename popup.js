@@ -8,8 +8,28 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('channelId').value = result.channelId || '';
             document.getElementById('guildId').value = result.guildId || '';
             document.getElementById('api').value = result.api || '';
+            var apiUrl = result.api + '/now-playing/' + result.guildId;
+            fetch(apiUrl, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "userid": result.userId,
+                    "channelid": result.channelId,
+                    "guildid": result.guildId,
+                    "song": result.url
+                },
+            }).then(response => response.json()) // Parse the response as JSON
+                .then(data => {
+                    // Assuming 'data' is an object with a 'title' property
+                    var videoId = getVideoId(data.url);
+                    document.getElementById('thumbnail').src = 'https://img.youtube.com/vi/' + videoId + '/0.jpg';
+                    document.getElementById('thumbnail').style.display = '' // Make the thumbnail visible
+                    document.getElementById('now-playing').textContent = data.title;
+                })
+                .catch(error => console.error('Error:', error)).finally(response => console.log(response));
         }
     });
+
 
     document.getElementById('apiForm').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -67,13 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('deletePreset').addEventListener('click', function() {
+    document.getElementById('deletePreset').addEventListener('click', function () {
         var presetName = document.getElementById('presetSelect').value;
         if (presetName) {
             if (confirm('Are you sure you want to delete this preset?')) {
-                chrome.storage.local.get({presets: {}}, function(result) {
+                chrome.storage.local.get({ presets: {} }, function (result) {
                     delete result.presets[presetName];
-                    chrome.storage.local.set({presets: result.presets}, function() {
+                    chrome.storage.local.set({ presets: result.presets }, function () {
                         document.getElementById('deletePreset').disabled = true;
                         loadPresets();
                     });
@@ -81,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-    
+
 
     function loadPresets() {
         chrome.storage.local.get({ presets: {} }, function (result) {
@@ -100,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadPresets();
 
     // Listen for messages from the background page
-    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    chrome.runtime.onMessage.addListener(function (message) {
         if (message.status) {
             document.getElementById('statusMessage').textContent = message.status;
         }
@@ -111,5 +131,24 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('statusMessage').style.color = 'red';
             document.getElementById('statusMessage').textContent = 'Error';
         }
+        if (message.song) {
+            // Display the song data in your popup
+            var videoId = getVideoId(message.song.url);
+            document.getElementById('thumbnail').src = 'https://img.youtube.com/vi/' + videoId + '/0.jpg';
+            document.getElementById('thumbnail').style.display = ''
+            document.getElementById('now-playing').textContent = message.song.title;
+            console.log('Song data received:', message.song);
+        }
     });
 });
+
+
+
+function getVideoId(url) {
+    var video_id = url.split('v=')[1];
+    var ampersandPosition = video_id.indexOf('&');
+    if (ampersandPosition !== -1) {
+        video_id = video_id.substring(0, ampersandPosition);
+    }
+    return video_id;
+}

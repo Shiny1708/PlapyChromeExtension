@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <meta charset="UTF-8">
@@ -13,13 +13,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 120vh;
-            background-color: #f4f4f4;
+            height: 500px;
+            width: 400px;
+            background-color: #ffffff;
         }
 
         .presetButton {
             padding: 10px 20px;
+            margin: 5px;
             border: none;
             border-radius: 4px;
             color: #fff;
@@ -68,6 +69,7 @@
 
         #presetSelect {
             padding: 10px;
+            margin: 10px;
             border-radius: 4px;
             border: 1px solid #ddd;
             background-color: #fff;
@@ -91,7 +93,7 @@
             padding: 10px;
             /* Reduced padding */
             border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         #apiForm input[type="text"] {
@@ -124,8 +126,36 @@
                 transform: scale(1);
             }
         }
+
+        #song-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        #thumbnail {
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        #now-playing-header {
+            margin: 10px;
+            padding: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #now-playing {
+            margin: 10px;
+            padding: 0;
+            font-size: 16px;
+        }
     </style>
-    <script src="popup.js"></script>
 </head>
 
 <body>
@@ -144,6 +174,12 @@
         <button id="apiCallButton" class="presetButton" type="submit">Send API Call</button>
         <span id="statusMessage"></span>
     </form>
+    <div id="song-container">
+        <p id="now-playing-header">Now playing:</p>
+        <p id="now-playing">No Song playing</p>
+        <img id="thumbnail" src="" alt="YouTube video thumbnail" style="display: none;">
+    </div>
+    <script src="popup.js"></script>
 </body>
 
 </html>

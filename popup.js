@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('thumbnail').style.display = '' // Make the thumbnail visible
                     document.getElementById('now-playing').textContent = data.title;
                 })
-                .catch(error => console.error('Error:', error)).finally(response => console.log(response));
+                .catch(error => console.error('Error:', error));
+                
         }
     });
 
@@ -121,15 +122,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Listen for messages from the background page
     chrome.runtime.onMessage.addListener(function (message) {
-        if (message.status) {
-            document.getElementById('statusMessage').textContent = message.status;
-        }
         if (message.status === 'Success') {
             document.getElementById('statusMessage').style.color = 'green';
             document.getElementById('statusMessage').textContent = 'Success';
         } else if (message.status === 'Error') {
             document.getElementById('statusMessage').style.color = 'red';
             document.getElementById('statusMessage').textContent = 'Error';
+        }
+        else if (message.status === 'Loading') {
+            document.getElementById('statusMessage').style.color = 'white';
+            document.getElementById('statusMessage').textContent = 'Loading';
         }
         if (message.song) {
             // Display the song data in your popup
@@ -140,6 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Song data received:', message.song);
         }
     });
+
+    //close websocket connection when popup is closed
+    window.onunload = window.onbeforeunload = function() {
+        if (ws) {
+            ws.close();
+            console.log('WebSocket connection closed');
+        }
+    }
 });
 
 

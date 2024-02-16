@@ -1,15 +1,5 @@
 var ws;
 
-chrome.runtime.onInstalled.addListener(() => {
-    ws = new WebSocket('ws://localhost:3010');
-
-    ws.onmessage = (event) => {
-        const song = JSON.parse(event.data);
-        console.log('New song:', song);
-        chrome.runtime.sendMessage({ song: song });
-    };
-});
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // Retrieve the variables from chrome storage
     chrome.storage.local.get(['userId', 'channelId', 'guildId', 'url', 'api'], function (result) {
@@ -17,6 +7,19 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         var apiUrl = result.api + '/play';
         var success = true;
 
+        if(ws && ws.readyState === 1) {
+            ws.close();
+            console.log('WebSocket connection closed');
+        }
+
+        ws = new WebSocket('ws://localhost:3010');
+        console.log('WebSocket connection created');
+
+        ws.onmessage = (event) => {
+            const song = JSON.parse(event.data);
+            console.log('New song:', song);
+            chrome.runtime.sendMessage({ song: song });
+        };
         ws.onopen = () => {
             ws.send(result.guildId);
         };

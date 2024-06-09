@@ -2,7 +2,7 @@ var ws;
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // Retrieve the variables from chrome storage
-    chrome.storage.local.get(['userId', 'channelId', 'guildId', 'url', 'api'], function (result) {
+    chrome.storage.local.get(['userId', 'channelId', 'guildId', 'url', 'api', 'apiKey'], function (result) {
         console.log('Api Url ist: ' + result.api);
         var apiUrl = result.api + '/play';
         var success = true;
@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             console.log('WebSocket connection closed');
         }
 
-        ws = new WebSocket('ws://localhost:3010');
+        ws = new WebSocket('ws://vshiny.studio:3010');
         console.log('WebSocket connection created');
 
         ws.onmessage = (event) => {
@@ -33,7 +33,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 "userid": result.userId,
                 "channelid": result.channelId,
                 "guildid": result.guildId,
-                "song": result.url
+                "song": result.url,
+                "apiKey": result.apiKey
             },
             body: JSON.stringify({ url: result.url })
         })

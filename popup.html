@@ -107,6 +107,17 @@
             color: #ffffff;
         }
 
+        #apiForm input[type="password"] {
+            width: 95%;
+            /* Reduced width */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background-color: #181a1b;
+            color: #ffffff;
+        }
+
         #apiCallButton {
             width: 50%;
             background-color: #007BFF;
@@ -174,6 +185,7 @@
         <input type="text" id="userId" placeholder="Enter your userid">
         <input type="text" id="channelId" placeholder="Enter the channelid of the music commands channel">
         <input type="text" id="guildId" placeholder="Enter guildid of your server">
+        <input type="password" id="apiKey" placeholder="Enter API Key">
         <button id="apiCallButton" class="presetButton" type="submit">Send API Call</button>
         <span id="statusMessage"></span>
     </form>

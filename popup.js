@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Retrieve the variables from chrome storage
-    chrome.storage.local.get(['userId', 'channelId', 'guildId', 'api'], function (result) {
+    chrome.storage.local.get(['userId', 'channelId', 'guildId', 'api', 'apiKey'], function (result) {
         if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError.message);
         } else {
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('channelId').value = result.channelId || '';
             document.getElementById('guildId').value = result.guildId || '';
             document.getElementById('api').value = result.api || '';
+            document.getElementById('apiKey').value = result.apiKey || '';
             var apiUrl = result.api + '/now-playing/' + result.guildId;
             fetch(apiUrl, {
                 method: "GET",
@@ -16,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     "userid": result.userId,
                     "channelid": result.channelId,
                     "guildid": result.guildId,
-                    "song": result.url
+                    "song": result.url,
+                    "apiKey": result.apiKey
                 },
             }).then(response => response.json()) // Parse the response as JSON
                 .then(data => {
@@ -40,17 +42,18 @@ document.addEventListener('DOMContentLoaded', function () {
         var guildId = document.getElementById('guildId').value;
         var url = '';
         var api = document.getElementById('api').value;
-
+        var apiKey = document.getElementById('apiKey').value;
+        
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             url = tabs[0].url; // Removed 'var' to use the 'url' variable from the outer scope
             chrome.runtime.sendMessage({ url: url });
 
             // Save the variables to chrome storage
-            chrome.storage.local.set({ userId: userId, channelId: channelId, guildId: guildId, url: url, api: api }, function () {
+            chrome.storage.local.set({ userId: userId, channelId: channelId, guildId: guildId, url: url, api: api , apiKey: apiKey}, function () {
                 if (chrome.runtime.lastError) {
                     console.error(chrome.runtime.lastError.message);
                 } else {
-                    console.log('Values are stored. UserId: ' + userId + ', ChannelId: ' + channelId + ', GuildId: ' + guildId + ', URL: ' + url + ', API: ' + api);
+                    console.log('Values are stored. UserId: ' + userId + ', ChannelId: ' + channelId + ', GuildId: ' + guildId + ', URL: ' + url + ', API: ' + api + ', APIKEY: ' + apiKey);
                 }
             });
         });
@@ -63,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 api: document.getElementById('api').value,
                 userId: document.getElementById('userId').value,
                 channelId: document.getElementById('channelId').value,
-                guildId: document.getElementById('guildId').value
+                guildId: document.getElementById('guildId').value,
+                apiKey: document.getElementById('apiKey').value
             };
             chrome.storage.local.get({ presets: {} }, function (result) {
                 result.presets[presetName] = preset;
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('userId').value = preset.userId;
                 document.getElementById('channelId').value = preset.channelId;
                 document.getElementById('guildId').value = preset.guildId;
+                document.getElementById('apiKey').value = preset.apiKey;
             }
         });
     });

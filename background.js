@@ -11,8 +11,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             ws.close();
             console.log('WebSocket connection closed');
         }
+        // Parse the API URL and modify it for the WebSocket
+        var urlObj = new URL(result.api);
+        if (urlObj.hostname === 'localhost' && urlObj.port === '3000') {
+            urlObj.port = '3010';
+        } else {
+            urlObj.protocol = 'ws:';
+            urlObj.port = '3010';
+        }
+        var wsUrl = urlObj.toString();
 
-        ws = new WebSocket('ws://vshiny.studio:3010');
+        ws = new WebSocket(wsUrl);
         console.log('WebSocket connection created');
 
         ws.onmessage = (event) => {
